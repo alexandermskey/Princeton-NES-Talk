@@ -31,7 +31,7 @@
       align-items: center;
       justify-content: center;
       overflow: hidden;
-      padding: 3rem 6rem 6rem 6rem;
+      padding: 2.5rem 6rem 4rem 6rem;
     }
 
     .slide {
@@ -51,10 +51,14 @@
     }
 
     /* Slide 1: Citations */
+    .citations {
+      padding-right: 12rem;
+    }
+
     .citations p {
-      font-size: 2rem;
-      line-height: 1.6;
-      margin-bottom: 1.75rem;
+      font-size: 1.9rem;
+      line-height: 1.5;
+      margin-bottom: 1.45rem;
     }
 
     .citations a {
@@ -151,42 +155,24 @@
       display: none;
     }
 
-    /* Persistent QR Code on both slides */
+    /* Persistent Larger QR Code on both slides */
     .qr-container {
       position: fixed;
-      bottom: 1.5rem;
-      right: 2rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.35rem;
+      bottom: 1.75rem;
+      right: 2.25rem;
       background: #ffffff;
-      padding: 0.6rem;
+      padding: 0.75rem;
       border: 1px solid #e5e2dc;
-      border-radius: 6px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+      border-radius: 8px;
+      box-shadow: 0 3px 14px rgba(0, 0, 0, 0.08);
       z-index: 999;
     }
 
     #qrBox svg,
     #qrBox img {
-      width: 120px;
-      height: 120px;
+      width: 190px !important;
+      height: 190px !important;
       display: block;
-    }
-
-    .qr-container a {
-      font-size: 0.8rem;
-      color: var(--muted);
-      text-decoration: none;
-      max-width: 135px;
-      word-break: break-all;
-      text-align: center;
-      line-height: 1.2;
-    }
-
-    .qr-container a:hover {
-      color: var(--accent);
     }
   </style>
 </head>
@@ -204,6 +190,8 @@
     <p>Abu Faraj al-Isfahani, <i><a href="https://archive.org/details/AlAghani__1438/Al-Aghani_17/page/240/mode/2up" target="_blank" rel="noopener noreferrer">Kitab al-Aghani</a></i> (Dar Sadir) vol.17 p.240</p>
 
     <p>ʿAbd al-Qahir al-Jurjani, <i><a href="https://archive.org/details/ar105crit48/page/n235/mode/2up" target="_blank" rel="noopener noreferrer">Dalaʾil al-Iʿjaz</a></i> (ed. Shakir) pp. 205, 259.</p>
+
+    <p>Alexander Key, "Translation of Poetry from Persian to Arabic: ʿAbd al-Qāhir al-Jurjānī and Others" <i><a href="https://doi.org/10.1163/22142371-12340037" target="_blank" rel="noopener noreferrer">Journal of Abbasid Studies</a></i> 5, 1-2 (2018): 146-176</p>
   </main>
 
   <!-- Slide 2: Poetry -->
@@ -228,10 +216,9 @@
 
   <!-- Persistent QR Code -->
   <aside class="qr-container">
-    <a id="qrLink" href="#" target="_blank" rel="noopener noreferrer">
+    <a id="qrLink" href="#" target="_blank" rel="noopener noreferrer" aria-label="QR Code link to presentation">
       <div id="qrBox"></div>
     </a>
-    <a id="qrText" href="#" target="_blank" rel="noopener noreferrer">Scan for links</a>
   </aside>
 
   <script>
@@ -251,22 +238,17 @@
     const presentationUrl = CUSTOM_PRESENTATION_URL || window.location.href;
     const qrBox = document.getElementById('qrBox');
     const qrLink = document.getElementById('qrLink');
-    const qrText = document.getElementById('qrText');
 
     qrLink.href = presentationUrl;
-    qrText.href = presentationUrl;
-    if (presentationUrl.startsWith('http')) {
-      qrText.textContent = presentationUrl.replace(/^https?:\/\//, '').replace(/\/$/, '');
-    }
 
     if (typeof qrcode !== 'undefined') {
       const qr = qrcode(0, 'M');
       qr.addData(presentationUrl);
       qr.make();
-      qrBox.innerHTML = qr.createSvgTag(4, 2);
+      qrBox.innerHTML = qr.createSvgTag(6, 2);
     } else {
       const img = document.createElement('img');
-      img.src = `https://quickchart.io/qr?text=${encodeURIComponent(presentationUrl)}&size=200&margin=1`;
+      img.src = `https://quickchart.io/qr?text=${encodeURIComponent(presentationUrl)}&size=300&margin=1`;
       img.alt = "QR Code";
       qrBox.appendChild(img);
     }
