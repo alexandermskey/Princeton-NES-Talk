@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
   <style>
     :root {
       --bg: #fcfbf9;
@@ -24,4 +25,296 @@
     body {
       font-family: 'EB Garamond', Georgia, serif;
       background-color: var(--bg);
-      color
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: 3rem 6rem 6rem 6rem;
+    }
+
+    .slide {
+      display: none;
+      width: 100%;
+      max-width: 1050px;
+      animation: fadeIn 0.25s ease-in-out;
+    }
+
+    .slide.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* Slide 1: Citations */
+    .citations p {
+      font-size: 2rem;
+      line-height: 1.6;
+      margin-bottom: 1.75rem;
+    }
+
+    .citations a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(184, 93, 25, 0.35);
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .citations a:hover {
+      color: #8a420f;
+      border-bottom-color: #8a420f;
+    }
+
+    /* Slide 2: Poetry */
+    .poetry-slide {
+      display: flex;
+      flex-direction: column;
+      gap: 3.5rem;
+      cursor: pointer;
+      user-select: none;
+      padding: 2rem 0;
+    }
+
+    .arabic-verse {
+      font-family: 'Amiri', 'Traditional Arabic', serif;
+      direction: rtl;
+      text-align: right;
+      font-size: 2.6rem;
+      line-height: 2;
+    }
+
+    .hemistich-gap {
+      display: inline-block;
+      width: 4.5rem;
+    }
+
+    .english-verse {
+      text-align: left;
+      font-size: 2rem;
+      line-height: 1.65;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      pointer-events: none;
+    }
+
+    .english-verse.revealed {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .hint {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.95rem;
+      color: var(--muted);
+      letter-spacing: 0.03em;
+      transition: opacity 0.3s;
+    }
+
+    /* Navigation Arrows */
+    .nav-arrow {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      font-size: 2.75rem;
+      color: var(--muted);
+      cursor: pointer;
+      padding: 1rem;
+      transition: color 0.2s, transform 0.2s;
+      z-index: 10;
+    }
+
+    .nav-arrow:hover {
+      color: var(--text);
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    .nav-arrow.prev {
+      left: 1.25rem;
+    }
+
+    .nav-arrow.next {
+      right: 1.25rem;
+    }
+
+    .nav-arrow.hidden {
+      display: none;
+    }
+
+    /* Persistent QR Code on both slides */
+    .qr-container {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.35rem;
+      background: #ffffff;
+      padding: 0.6rem;
+      border: 1px solid #e5e2dc;
+      border-radius: 6px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+      z-index: 999;
+    }
+
+    #qrBox svg,
+    #qrBox img {
+      width: 120px;
+      height: 120px;
+      display: block;
+    }
+
+    .qr-container a {
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-decoration: none;
+      max-width: 135px;
+      word-break: break-all;
+      text-align: center;
+      line-height: 1.2;
+    }
+
+    .qr-container a:hover {
+      color: var(--accent);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Left Arrow -->
+  <button id="prevBtn" class="nav-arrow prev hidden" aria-label="Previous" onclick="handlePrev()">&#8592;</button>
+
+  <!-- Slide 1: Sources -->
+  <main id="slide-0" class="slide active citations">
+    <p>al-Farabi, <i>Kitab al-Huruf</i> (ed. Mahdi) p.1.</p>
+
+    <p>Zayn al-Din al-Razi, <i>Rawdat al-Fasahah</i> (ed. al-Jabr 2005) p.172.</p>
+
+    <p>Abu Faraj al-Isfahani, <i><a href="https://archive.org/details/AlAghani__1438/Al-Aghani_17/page/240/mode/2up" target="_blank" rel="noopener noreferrer">Kitab al-Aghani</a></i> (Dar Sadir) vol.17 p.240</p>
+
+    <p>ʿAbd al-Qahir al-Jurjani, <i><a href="https://archive.org/details/ar105crit48/page/n235/mode/2up" target="_blank" rel="noopener noreferrer">Dalaʾil al-Iʿjaz</a></i> (ed. Shakir) pp. 205, 259.</p>
+  </main>
+
+  <!-- Slide 2: Poetry -->
+  <main id="slide-1" class="slide" onclick="toggleEnglish()">
+    <div class="poetry-slide">
+      <div class="arabic-verse" lang="ar" dir="rtl">
+        وَقَدْ عَلَوْتُ قُتُودَ الرحْل يَسْفَعُني<span class="hemistich-gap">&#9;</span>يومٌ قُدَيَدِيمَة الجوزاء مسموم
+      </div>
+
+      <div id="englishPoetry" class="english-verse">
+        I had raised the saddle frames<br>
+        a day burnt my face black<br>
+        a little approach of Gemini<br>
+        and a scalding wind
+      </div>
+    </div>
+    <div id="clickHint" class="hint">Click slide or press right arrow to reveal translation</div>
+  </main>
+
+  <!-- Right Arrow -->
+  <button id="nextBtn" class="nav-arrow next" aria-label="Next" onclick="handleNext()">&#8594;</button>
+
+  <!-- Persistent QR Code -->
+  <aside class="qr-container">
+    <a id="qrLink" href="#" target="_blank" rel="noopener noreferrer">
+      <div id="qrBox"></div>
+    </a>
+    <a id="qrText" href="#" target="_blank" rel="noopener noreferrer">Scan for links</a>
+  </aside>
+
+  <script>
+    const CUSTOM_PRESENTATION_URL = "";
+
+    let currentSlide = 0;
+    const slides = [
+      document.getElementById('slide-0'),
+      document.getElementById('slide-1')
+    ];
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const englishPoetry = document.getElementById('englishPoetry');
+    const clickHint = document.getElementById('clickHint');
+
+    // Generate QR Code
+    const presentationUrl = CUSTOM_PRESENTATION_URL || window.location.href;
+    const qrBox = document.getElementById('qrBox');
+    const qrLink = document.getElementById('qrLink');
+    const qrText = document.getElementById('qrText');
+
+    qrLink.href = presentationUrl;
+    qrText.href = presentationUrl;
+    if (presentationUrl.startsWith('http')) {
+      qrText.textContent = presentationUrl.replace(/^https?:\/\//, '').replace(/\/$/, '');
+    }
+
+    if (typeof qrcode !== 'undefined') {
+      const qr = qrcode(0, 'M');
+      qr.addData(presentationUrl);
+      qr.make();
+      qrBox.innerHTML = qr.createSvgTag(4, 2);
+    } else {
+      const img = document.createElement('img');
+      img.src = `https://quickchart.io/qr?text=${encodeURIComponent(presentationUrl)}&size=200&margin=1`;
+      img.alt = "QR Code";
+      qrBox.appendChild(img);
+    }
+
+    function updateNavButtons() {
+      const isEnglishRevealed = englishPoetry.classList.contains('revealed');
+      prevBtn.classList.toggle('hidden', currentSlide === 0);
+      nextBtn.classList.toggle('hidden', currentSlide === 1 && isEnglishRevealed);
+      clickHint.style.opacity = isEnglishRevealed ? '0' : '1';
+    }
+
+    function changeSlide(index) {
+      slides[currentSlide].classList.remove('active');
+      currentSlide = index;
+      slides[currentSlide].classList.add('active');
+      updateNavButtons();
+    }
+
+    function handleNext() {
+      if (currentSlide === 0) {
+        changeSlide(1);
+      } else if (currentSlide === 1 && !englishPoetry.classList.contains('revealed')) {
+        englishPoetry.classList.add('revealed');
+        updateNavButtons();
+      }
+    }
+
+    function handlePrev() {
+      if (currentSlide === 1) {
+        changeSlide(0);
+      }
+    }
+
+    function toggleEnglish() {
+      englishPoetry.classList.toggle('revealed');
+      updateNavButtons();
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') {
+        handleNext();
+      } else if (e.key === 'ArrowLeft') {
+        handlePrev();
+      } else if ((e.key === ' ' || e.key === 'Enter') && currentSlide === 1) {
+        e.preventDefault();
+        toggleEnglish();
+      }
+    });
+  </script>
+</body>
+</html>
